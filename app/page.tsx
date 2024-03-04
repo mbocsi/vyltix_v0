@@ -1,15 +1,10 @@
 import SearchBar from "@/components/searchbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getUpcomingArtists } from "@/lib/requests";
 
-const events: { title: string }[] = [
-  { title: "IU" },
-  { title: "Dreamcatcher" },
-  { title: "Coldplay" },
-  { title: "Taylor Swift" },
-];
-
-export default function Home() {
+export default async function Home() {
+  const events = await getUpcomingArtists(4);
   return (
     <main className="flex min-h-screen flex-col items-center justify-around p-24 pt-36">
       <div className="w-full flex flex-col items-center gap-16">
