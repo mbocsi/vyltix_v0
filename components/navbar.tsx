@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 import { redirect } from "next/navigation";
+import { ModeToggle } from "./mode-toggle";
 
 export default function Navbar() {
   async function search(formData: FormData) {
@@ -9,9 +10,9 @@ export default function Navbar() {
     redirect(`$/search?query=${formData.get("query")}`);
   }
   return (
-    <nav className="fixed top-0 h-12 w-full flex flex-row gap-4 justify-between items-center px-32 bg-white bg-opacity-50 dark:bg-zinc-950 dark:bg-opacity-60 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-900">
+    <nav className="fixed top-0 h-12 w-full flex flex-row gap-4 justify-between items-center px-24 bg-white bg-opacity-50 dark:bg-zinc-950 dark:bg-opacity-60 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-900 z-10">
       <Link href="/">
-        <p className="text-2xl">Vyltix</p>
+        <p className="text-2xl pr-8">Vyltix</p>
       </Link>
       <div className="w-full flex flex-row justify-between items-center">
         <div className="flex flex-row gap-8 items-center">
@@ -29,7 +30,7 @@ export default function Navbar() {
             <input
               name="query"
               className="focus:outline-none bg-transparent pr-2"
-              placeholder="Search by event, artist, or venue"
+              placeholder="Search"
             ></input>
           </form>
 
@@ -37,7 +38,10 @@ export default function Navbar() {
           <Link href="/artists">Artists</Link>
           <Link href="/venues">Venues</Link>
         </div>
-        <Link href="/login">Login</Link>
+        <div className="flex flex-row items-center gap-4">
+          <ModeToggle></ModeToggle>
+          <Link href="/login">Login</Link>
+        </div>
       </div>
     </nav>
   );

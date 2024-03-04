@@ -1,4 +1,14 @@
 import SearchBar from "@/components/searchbar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const events: { title: string }[] = [
+  { title: "IU" },
+  { title: "Dreamcatcher" },
+  { title: "Coldplay" },
+  { title: "Taylor Swift" },
+];
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-around p-24 pt-36">
@@ -8,7 +18,28 @@ export default function Home() {
         </div>
         <SearchBar href="/" placeholder="Search by event, artist, or venue" />
       </div>
-      <div></div>
+      <div className="w-full">
+        <h1 className="text-3xl py-4">Upcoming Events</h1>
+        <div className="flex flex-row gap-8 justify-evenly flex-wrap-reverse">
+          {events.map((event) => (
+            <Card
+              key={event.title}
+              className="grow basis-0 dark:border-zinc-600"
+            >
+              <CardHeader>
+                <CardTitle>{event.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-[150px] min-w-full rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
+                  <Skeleton className="h-4 w-40 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
+                  <Skeleton className="h-4 w-24 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>{" "}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
     </main>
   );
 }
