@@ -1,10 +1,7 @@
 import SearchBar from "@/components/searchbar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { getUpcomingArtists } from "@/lib/requests";
+import UpcomingArtists from "./upcoming-artists";
 
 export default async function Home() {
-  const events = await getUpcomingArtists(4);
   return (
     <main className="flex min-h-screen flex-col items-center justify-around p-24 pt-36">
       <div className="w-full flex flex-col items-center gap-16">
@@ -15,25 +12,7 @@ export default async function Home() {
       </div>
       <div className="w-full">
         <h1 className="text-3xl py-4">Upcoming Events</h1>
-        <div className="flex flex-row gap-8 justify-evenly flex-wrap-reverse">
-          {events.map((event) => (
-            <Card
-              key={event.title}
-              className="grow basis-0 dark:border-zinc-600"
-            >
-              <CardHeader>
-                <CardTitle>{event.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="h-[150px] min-w-full rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
-                  <Skeleton className="h-4 w-40 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
-                  <Skeleton className="h-4 w-24 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>{" "}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <UpcomingArtists />
       </div>
     </main>
   );
