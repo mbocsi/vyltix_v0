@@ -2,8 +2,12 @@ import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 import { redirect } from "next/navigation";
 import { ModeToggle } from "./mode-toggle";
+import { currentUser } from "@clerk/nextjs";
+import StyledUserButton from "./styled-userbutton";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await currentUser();
+
   async function search(formData: FormData) {
     "use server";
 
@@ -39,8 +43,8 @@ export default function Navbar() {
           <Link href="/venues">Venues</Link>
         </div>
         <div className="flex flex-row items-center gap-4">
+          {!user ? <Link href="/sign-in">Login</Link> : <StyledUserButton />}
           <ModeToggle></ModeToggle>
-          <Link href="/login">Login</Link>
         </div>
       </div>
     </nav>
