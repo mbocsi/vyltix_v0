@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 async function getData() {
-  return getUpcomingArtists(4);
+  return await getUpcomingArtists(4);
 }
 const queryClient = new QueryClient();
 
@@ -27,7 +27,7 @@ function ArtistContent() {
   // const queryClient = useQueryClient();
 
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ["todos"],
+    queryKey: ["artists"],
     queryFn: getData,
   });
 
