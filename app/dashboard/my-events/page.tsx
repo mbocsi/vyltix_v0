@@ -39,7 +39,7 @@ export default function Page() {
           </Link>
         ))}
         <Link href={`/dashboard/my-events/create-event`} className="w-min">
-          <div className="flex h-12 p-4 rounded-lg flex-row items-center gap-2 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-900 border">
+          <div className="flex h-12 p-4 rounded-lg flex-row items-center gap-2 bg-zinc-200 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-900 border">
             <CgAddR size={25} />
             <p className="whitespace-nowrap">Create Event</p>
           </div>
