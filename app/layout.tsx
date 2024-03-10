@@ -3,6 +3,7 @@ import { Inter, Nunito_Sans } from "next/font/google";
 import Navbar from "@/components/navbar";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito_Sans({ subsets: ["latin"] });
@@ -18,13 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={nunito.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Navbar></Navbar>
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={nunito.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Navbar></Navbar>
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
