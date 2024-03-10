@@ -38,11 +38,12 @@ export default async function Navbar() {
             ></input>
           </form>
 
-          <Link href="/concerts">Concerts</Link>
+          <Link href="/events">Concerts</Link>
           <Link href="/artists">Artists</Link>
           <Link href="/venues">Venues</Link>
         </div>
         <div className="flex flex-row items-center gap-4">
+          {user ? <Link href="/dashboard">Dashboard</Link> : ""}
           {!user ? <Link href="/sign-in">Login</Link> : <StyledUserButton />}
           <ModeToggle></ModeToggle>
         </div>

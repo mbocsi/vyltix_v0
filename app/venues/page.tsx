@@ -1,8 +1,7 @@
 export default async function Page() {
   return (
-    <div>
-      <h1>Venues</h1>
-      <p>WIP!</p>
-    </div>
+    <main className="flex min-h-screen flex-col items-center p-24">
+      <h1 className="text-3xl">Venues</h1>
+    </main>
   );
 }
