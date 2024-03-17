@@ -142,7 +142,7 @@ export default function CreateEvent() {
                 {artists.map((field, index) => (
                   <div
                     key={field.id}
-                    className="space-y-4 bg-zinc-800 p-3 rounded-lg"
+                    className="space-y-4 bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg"
                   >
                     <FormField
                       control={form.control}
@@ -187,7 +187,7 @@ export default function CreateEvent() {
               {sections.map((field, index) => (
                 <div
                   key={field.id}
-                  className="bg-zinc-800 p-3 rounded-lg space-y-2"
+                  className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg space-y-2"
                 >
                   <FormField
                     control={form.control}

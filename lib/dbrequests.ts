@@ -1,7 +1,9 @@
 import { db, events, venues, sections, artists, artistsToEvents } from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
+import { eq, and } from "drizzle-orm";
 
 export async function addEvent(data: createEventData, userId: string) {
+  let eventId;
   await db.transaction(async (tx) => {
     const venueData = {
       name: data["venueName"],
@@ -23,6 +25,8 @@ export async function addEvent(data: createEventData, userId: string) {
       .insert(events)
       .values(eventData)
       .returning({ id: events.id });
+
+    eventId = event[0]["id"];
 
     const sectionData: {
       name: string;
@@ -64,4 +68,72 @@ export async function addEvent(data: createEventData, userId: string) {
 
     await tx.insert(artistsToEvents).values(eventToArtistData);
   });
+  return eventId;
+}
+
+export async function getEvents(userId: string) {
+  const results = await db.query.events.findMany({
+    where: eq(events.userId, userId),
+    columns: {
+      id: true,
+      name: true,
+    },
+    with: {
+      venue: {
+        columns: {
+          name: true,
+        },
+      },
+      sections: {
+        columns: {
+          capacity: true,
+          admissions: true,
+        },
+      },
+      artistsToEvents: {
+        with: {
+          artist: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return results;
+}
+
+export async function getEvent(eventId: number, userId: string) {
+  const results = await db.query.events.findFirst({
+    where: and(eq(events.id, eventId), eq(events.userId, userId)),
+    columns: {
+      name: true,
+    },
+    with: {
+      venue: {
+        columns: {
+          name: true,
+        },
+      },
+      sections: {
+        columns: {
+          name: true,
+          capacity: true,
+          admissions: true,
+          price: true,
+        },
+      },
+      artistsToEvents: {
+        with: {
+          artist: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return results;
 }

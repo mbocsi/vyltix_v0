@@ -56,7 +56,7 @@ export const sections = pgTable(
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
     capacity: integer("capacity").notNull(),
-    admissions: integer("admissions").default(0),
+    admissions: integer("admissions").notNull().default(0),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(),
     description: text("description"),
     eventId: integer("event_id").notNull(),
