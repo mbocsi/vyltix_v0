@@ -15,6 +15,13 @@
       "when": 1710646800253,
       "tag": "0001_flaky_ultragirl",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710652590013,
+      "tag": "0002_aromatic_tattoo",
+      "breakpoints": true
     }
   ]
 }

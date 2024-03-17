@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "drizzle-kit generate:pg"
+    "drizzle:generate": "drizzle-kit generate:pg",
+    "drizzle:push": "drizzle-kit push:pg",
+    "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.9",
