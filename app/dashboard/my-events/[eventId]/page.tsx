@@ -37,8 +37,8 @@ export default async function Event({
     let totalRevenue = 0;
     return (
       <main className="flex min-h-screen flex-col items-center p-36">
-        <h1 className="text-3xl">{event.name}</h1>
-        <div className="w-full flex flex-col space-y-4 items-center">
+        <h1 className="text-3xl pb-8">{event.name}</h1>
+        <div className="w-full flex flex-col space-y-4 px-8">
           <h1 className="text-xl">Sections</h1>
           <Table className="w-full">
             <TableHeader>

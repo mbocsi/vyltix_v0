@@ -138,6 +138,13 @@ export async function getEvent(eventId: number, userId: string) {
         },
       },
       sections: {
+        with: {
+          tickets: {
+            columns: {
+              vacant: true,
+            },
+          },
+        },
         columns: {
           name: true,
           capacity: true,
