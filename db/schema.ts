@@ -5,7 +5,7 @@ import {
   timestamp,
   integer,
   numeric,
-  varchar,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -19,6 +19,8 @@ export const events = pgTable(
     venueId: integer("venue_id").notNull(),
     imageURL: text("image"),
     description: text("description"),
+    time: timestamp("time"),
+    public: boolean("public").default(false),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   }
   //   (events) => {
@@ -69,10 +71,25 @@ export const sections = pgTable(
   //   }
 );
 
-export const sectionsRelations = relations(sections, ({ one }) => ({
+export const sectionsRelations = relations(sections, ({ one, many }) => ({
   event: one(events, {
     fields: [sections.eventId],
     references: [events.id],
+  }),
+  tickets: many(tickets),
+}));
+
+export const tickets = pgTable("tickets", {
+  id: serial("id").primaryKey(),
+  sectionId: integer("section_id").notNull(),
+  vacant: boolean("vacant").notNull().default(true),
+  ownedBy: text("owned_by"),
+});
+
+export const ticketsRelations = relations(tickets, ({ one }) => ({
+  section: one(sections, {
+    fields: [tickets.sectionId],
+    references: [sections.id],
   }),
 }));
 
@@ -96,6 +113,7 @@ export const artistsRelations = relations(artists, ({ many }) => ({
 }));
 
 export const artistsToEvents = pgTable("artistsToEvents", {
+  id: serial("id").primaryKey(),
   eventId: integer("eventId").notNull(),
   artistId: integer("artistId").notNull(),
 });

@@ -1,4 +1,12 @@
-import { db, events, venues, sections, artists, artistsToEvents } from "@/db";
+import {
+  db,
+  events,
+  venues,
+  sections,
+  artists,
+  artistsToEvents,
+  tickets,
+} from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
 import { eq, and } from "drizzle-orm";
 
@@ -43,7 +51,20 @@ export async function addEvent(data: createEventData, userId: string) {
         eventId: event[0]["id"],
       };
     });
-    await tx.insert(sections).values(sectionData);
+    const sectionRet = await tx
+      .insert(sections)
+      .values(sectionData)
+      .returning({ id: sections.id, capacity: sections.capacity });
+
+    let ticketData: { sectionId: number }[] = [];
+    sectionRet.forEach((section) => {
+      const data = Array(section.capacity).fill({
+        sectionId: section.id,
+      });
+      ticketData = ticketData.concat(data);
+    });
+
+    await tx.insert(tickets).values(ticketData);
 
     const artistData: {
       name: string;
