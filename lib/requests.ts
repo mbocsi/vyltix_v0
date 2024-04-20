@@ -1,50 +1,17 @@
+"use server";
+
+import { getTopEvents, getTopArtists } from "@/lib/dbrequests";
+
 export async function getUpcomingArtists(n: number) {
-  const events: { title: string }[] = [
-    { title: "IU" },
-    { title: "Dreamcatcher" },
-    { title: "Coldplay" },
-    { title: "Taylor Swift" },
-    { title: "Imagine Dragons" },
-    { title: "BTS" },
-    { title: "Ed Sheeran" },
-    { title: "The Weeknd" },
-    { title: "Post Malone" },
-    { title: "Marshmello" },
-    { title: "Lil Nas" },
-    { title: "Seventeen" },
-  ];
-  const res = new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-  await res;
-  return events.slice(0, n);
+  return await getTopArtists(n);
 }
 
 export async function getUpcomingEvents(n: number) {
-  const events: { title: string }[] = [
-    { title: "title1" },
-    { title: "title2" },
-    { title: "title3" },
-    { title: "title4" },
-    { title: "title5" },
-    { title: "title6" },
-    { title: "title7" },
-    { title: "title8" },
-    { title: "title9" },
-    { title: "title10" },
-    { title: "title11" },
-    { title: "title12" },
-    { title: "title13" },
-    { title: "title14" },
-  ];
-  const res = new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-  await res;
-  return events.slice(0, n);
+  return await getTopEvents(n);
 }
 
 export async function getVenues(n: number) {
+  console.log("get venues!");
   const events: { title: string }[] = [
     { title: "Allstate Arena" },
     { title: "AT&T Stadium" },
@@ -58,7 +25,7 @@ export async function getVenues(n: number) {
     { title: "Radio City Music Hall" },
   ];
   const res = new Promise((resolve) => {
-    setTimeout(resolve, 1000);
+    setTimeout(resolve, 300);
   });
   await res;
   return events.slice(0, n);

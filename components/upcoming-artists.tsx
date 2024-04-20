@@ -57,13 +57,13 @@ function ArtistContent({ count }: { count: number }) {
     return (
       <div className="flex flex-row gap-8 justify-evenly flex-wrap">
         {data.map((event) => (
-          <Card className="grow basis-0 dark:border-zinc-600" key={event.title}>
+          <Card className="grow basis-0 dark:border-zinc-600" key={event.id}>
             <Link
-              href={`/artists/${event.title}`}
+              href={`/artists/${event.name}`}
               className="grow basis-0 dark:border-zinc-600"
             >
               <CardHeader>
-                <CardTitle>{event.title}</CardTitle>
+                <CardTitle>{event.name}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-2">

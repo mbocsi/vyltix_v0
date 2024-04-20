@@ -1,3 +1,5 @@
+"use server";
+
 import {
   db,
   events,
@@ -162,6 +164,28 @@ export async function getEvent(eventId: number, userId: string) {
         },
       },
     },
+  });
+  return results;
+}
+
+export async function getTopEvents(n: number) {
+  const results = await db.query.events.findMany({
+    columns: {
+      id: true,
+      name: true,
+    },
+    limit: n,
+  });
+  return results;
+}
+
+export async function getTopArtists(n: number) {
+  const results = await db.query.artists.findMany({
+    columns: {
+      id: true,
+      name: true,
+    },
+    limit: n,
   });
   return results;
 }
