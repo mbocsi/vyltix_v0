@@ -1,5 +1,5 @@
 import SearchBar from "@/components/searchbar";
-import UpcomingArtists from "./upcoming-artists";
+import UpcomingEvents from "@/components/upcoming-events";
 
 export default async function Home() {
   return (
@@ -12,7 +12,7 @@ export default async function Home() {
       </div>
       <div className="w-full">
         <h1 className="text-3xl py-4">Upcoming Events</h1>
-        <UpcomingArtists />
+        <UpcomingEvents count={4} />
       </div>
     </main>
   );
