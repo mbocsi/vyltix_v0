@@ -14,45 +14,53 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createEvent } from "./actions";
 
 const formSchema = z.object({
   eventName: z.string().min(2).max(50),
+  eventDescription: z.string().optional(),
   artists: z
     .object({
       name: z.string(),
-      social: z.string(),
+      description: z.string().optional(),
+      social: z.string().optional(),
     })
     .array()
     .min(1),
   venueName: z.string().min(2).max(50),
   venueAddress: z.string().optional(),
+  venueDescription: z.string().optional(),
   sections: z
     .object({
-      sectionName: z.string(),
+      name: z.string(),
       capacity: z.coerce.number(),
-      ticketCost: z.coerce.number(),
+      ticketCost: z.coerce.string(),
+      description: z.string().optional(),
     })
     .array()
     .min(1),
 });
 
+export type createEventData = z.infer<typeof formSchema>;
+
 export default function CreateEvent() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      artists: [{ name: "", social: "" }],
+      artists: [{ name: "", social: "", description: "" }],
       sections: [
         {
-          sectionName: "",
+          name: "",
           capacity: 100,
-          ticketCost: 0,
+          ticketCost: "0",
+          description: "",
         },
       ],
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    createEvent(values);
   }
 
   const {
@@ -134,7 +142,7 @@ export default function CreateEvent() {
                 {artists.map((field, index) => (
                   <div
                     key={field.id}
-                    className="space-y-4 bg-zinc-800 p-3 rounded-lg"
+                    className="space-y-4 bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg"
                   >
                     <FormField
                       control={form.control}
@@ -163,7 +171,9 @@ export default function CreateEvent() {
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => appendArtist({ name: "", social: "" })}
+                  onClick={() =>
+                    appendArtist({ name: "", social: "", description: "" })
+                  }
                   className="w-full"
                 >
                   Add Artist
@@ -177,11 +187,11 @@ export default function CreateEvent() {
               {sections.map((field, index) => (
                 <div
                   key={field.id}
-                  className="bg-zinc-800 p-3 rounded-lg space-y-2"
+                  className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg space-y-2"
                 >
                   <FormField
                     control={form.control}
-                    name={`sections.${index}.sectionName`}
+                    name={`sections.${index}.name`}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Section Name</FormLabel>
@@ -234,9 +244,10 @@ export default function CreateEvent() {
                 variant="secondary"
                 onClick={() =>
                   appendSection({
-                    sectionName: "",
+                    name: "",
                     capacity: 100,
-                    ticketCost: 0,
+                    ticketCost: "0",
+                    description: "",
                   })
                 }
               >
