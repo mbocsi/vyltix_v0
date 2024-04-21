@@ -10,6 +10,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import Image from "next/image";
 
 async function getData(count: number) {
   return await getUpcomingArtists(count);
@@ -43,9 +44,7 @@ function ArtistContent({ count }: { count: number }) {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-2">
-                <Skeleton className="h-[150px] min-w-full rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
-                <Skeleton className="h-4 w-52 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
-                <Skeleton className="h-4 w-24 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>{" "}
+                <Skeleton className="h-[150px] w-[150] min-w-full rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
               </div>
             </CardContent>
           </Card>
@@ -67,9 +66,17 @@ function ArtistContent({ count }: { count: number }) {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-2">
-                  <Skeleton className="h-[150px] min-w-full rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
-                  <Skeleton className="h-4 w-52 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
-                  <Skeleton className="h-4 w-24 rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>{" "}
+                  {artist.imageURL ? (
+                    <Image
+                      src={artist.imageURL}
+                      alt={`Image of ${artist.name}`}
+                      width={150}
+                      height={150}
+                      className="rounded-lg"
+                    ></Image>
+                  ) : (
+                    <Skeleton className="h-[150px] w-[150px] rounded-lg dark:bg-zinc-700 bg-zinc-200"></Skeleton>
+                  )}
                 </div>
               </CardContent>
             </Link>

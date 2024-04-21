@@ -184,6 +184,7 @@ export async function getTopArtists(n: number) {
     columns: {
       id: true,
       name: true,
+      imageURL: true,
     },
     limit: n,
   });
