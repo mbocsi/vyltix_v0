@@ -98,6 +98,7 @@ export const artists = pgTable(
   {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
+    imageURL: text("image"),
     description: text("description"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   }

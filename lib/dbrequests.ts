@@ -127,7 +127,7 @@ export async function getEvents(userId: string) {
   return results;
 }
 
-export async function getEvent(eventId: number, userId: string) {
+export async function getEventUser(eventId: number, userId: string) {
   const results = await db.query.events.findFirst({
     where: and(eq(events.id, eventId), eq(events.userId, userId)),
     columns: {
@@ -186,6 +186,62 @@ export async function getTopArtists(n: number) {
       name: true,
     },
     limit: n,
+  });
+  return results;
+}
+
+export async function getArtist(id: number) {
+  const results = await db.query.artists.findFirst({
+    where: eq(artists.id, id),
+  });
+  return results;
+}
+
+export async function getArtistEvents(id: number) {
+  const results = await db.query.artistsToEvents.findMany({
+    where: eq(artistsToEvents.artistId, id),
+    with: {
+      event: {
+        columns: {
+          id: true,
+          name: true,
+        },
+        with: {
+          venue: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return results;
+}
+
+export async function getEventInfo(id: number) {
+  const results = await db.query.events.findFirst({
+    where: eq(events.id, id),
+    columns: {
+      name: true,
+      description: true,
+      imageURL: true,
+      time: true,
+    },
+    with: {
+      artistsToEvents: {
+        where: eq(artistsToEvents.eventId, id),
+        with: {
+          artist: {
+            columns: {
+              id: true,
+              name: true,
+              imageURL: true,
+            },
+          },
+        },
+      },
+    },
   });
   return results;
 }

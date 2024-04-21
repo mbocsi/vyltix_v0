@@ -1,4 +1,4 @@
-import { getEvent } from "@/lib/dbrequests";
+import { getEventUser } from "@/lib/dbrequests";
 import { auth } from "@clerk/nextjs";
 import {
   Table,
@@ -22,7 +22,7 @@ export default async function Event({
   const { userId } = auth();
   let event;
   if (userId && eventId) {
-    event = await getEvent(parseInt(eventId), userId);
+    event = await getEventUser(parseInt(eventId), userId);
   }
 
   if (event) {

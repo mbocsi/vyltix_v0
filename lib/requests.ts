@@ -11,7 +11,6 @@ export async function getUpcomingEvents(n: number) {
 }
 
 export async function getVenues(n: number) {
-  console.log("get venues!");
   const events: { title: string }[] = [
     { title: "Allstate Arena" },
     { title: "AT&T Stadium" },
