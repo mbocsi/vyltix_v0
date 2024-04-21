@@ -32,7 +32,7 @@ export default async function Page({
       {artistInfo?.description ? (
         <p>About the artist: {artistInfo?.description}</p>
       ) : null}
-      <h1 className="text-3xl">{artistInfo?.name}'s events</h1>
+      <h1 className="text-3xl">{artistInfo?.name}&apos;s events</h1>
       <div className="flex flex-col w-1/2">
         {events.map((rel) => (
           <Link href={`/events/${rel.event.id}`} key={rel.event.id}>
