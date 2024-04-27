@@ -11,6 +11,7 @@ import {
 } from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
 import { eq, and } from "drizzle-orm";
+import { Event } from "@/app/dashboard/my-events/[eventId]/sections";
 
 export async function addEvent(data: createEventData, userId: string) {
   let eventId;
@@ -132,6 +133,7 @@ export async function getEventUser(eventId: number, userId: string) {
     where: and(eq(events.id, eventId), eq(events.userId, userId)),
     columns: {
       name: true,
+      id: true,
     },
     with: {
       venue: {
@@ -148,6 +150,7 @@ export async function getEventUser(eventId: number, userId: string) {
           },
         },
         columns: {
+          id: true,
           name: true,
           capacity: true,
           admissions: true,
@@ -245,4 +248,42 @@ export async function getEventInfo(id: number) {
     },
   });
   return results;
+}
+
+export async function saveSection(data: Event) {
+  await db.transaction(async (tx) => {
+    let ticketData: { sectionId: number }[] = [];
+    data.sections.forEach(async (section) => {
+      const prevSection = await tx.query.sections.findFirst({
+        columns: { capacity: true },
+        where: eq(sections.id, section.id),
+      });
+      if (!prevSection) {
+        throw new Error("Section not found in database!");
+      }
+      console.log(prevSection.capacity);
+      const deficit = section.capacity - prevSection.capacity;
+      console.log(deficit);
+      if (deficit < 1) {
+        return;
+      }
+      const data = Array(deficit).fill({
+        sectionId: section.id,
+      });
+      ticketData = ticketData.concat(data);
+    });
+    if (ticketData.length != 0) {
+      await tx.insert(tickets).values(ticketData);
+    }
+    data.sections.forEach(async (section) => {
+      await tx
+        .update(sections)
+        .set({
+          name: section.name,
+          capacity: section.capacity,
+          price: section.price,
+        })
+        .where(eq(sections.id, section.id));
+    });
+  });
 }
