@@ -1,6 +1,34 @@
 import { getEventUser } from "@/lib/dbrequests";
 import { auth } from "@clerk/nextjs";
 import Sections from "./sections";
+import Description from "./description";
+
+export type Event = {
+  name: string;
+  id: number;
+  description: string | null;
+  venue: {
+    name: string;
+  };
+  sections: {
+    id: number;
+    admissions: number;
+    capacity: number;
+    name: string;
+    price: string;
+    tickets: {
+      vacant: boolean;
+    }[];
+  }[];
+  artistsToEvents: {
+    id: number;
+    eventId: number;
+    artistId: number;
+    artist: {
+      name: string;
+    };
+  }[];
+};
 
 export default async function Event({
   params,
@@ -19,6 +47,7 @@ export default async function Event({
       <main className="flex min-h-screen flex-col items-center p-36">
         <h1 className="text-3xl pb-8">{event.name}</h1>
         <div className="w-full flex flex-col space-y-4 px-8">
+          <Description initEvent={event} />
           <Sections initEvent={event}></Sections>
         </div>
       </main>

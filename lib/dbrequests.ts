@@ -11,7 +11,7 @@ import {
 } from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
 import { eq, and } from "drizzle-orm";
-import { Event } from "@/app/dashboard/my-events/[eventId]/sections";
+import { Event } from "@/app/dashboard/my-events/[eventId]/page";
 
 export async function addEvent(data: createEventData, userId: string) {
   let eventId;
@@ -134,6 +134,7 @@ export async function getEventUser(eventId: number, userId: string) {
     columns: {
       name: true,
       id: true,
+      description: true,
     },
     with: {
       venue: {
@@ -288,4 +289,8 @@ export async function saveSection(data: Event) {
         .where(eq(sections.id, section.id));
     }
   });
+}
+
+export async function saveDescription(desc: string, id: number) {
+  await db.update(events).set({ description: desc }).where(eq(events.id, id));
 }

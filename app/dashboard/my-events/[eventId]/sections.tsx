@@ -15,32 +15,7 @@ import { CgAddR } from "react-icons/cg";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { saveSectionChanges } from "./actions";
-
-export type Event = {
-  name: string;
-  id: number;
-  venue: {
-    name: string;
-  };
-  sections: {
-    id: number;
-    admissions: number;
-    capacity: number;
-    name: string;
-    price: string;
-    tickets: {
-      vacant: boolean;
-    }[];
-  }[];
-  artistsToEvents: {
-    id: number;
-    eventId: number;
-    artistId: number;
-    artist: {
-      name: string;
-    };
-  }[];
-};
+import { Event } from "./page";
 
 export default function Sections({ initEvent }: { initEvent: Event }) {
   const [event, setEvent] = useState(initEvent);
