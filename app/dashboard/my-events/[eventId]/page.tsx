@@ -2,6 +2,7 @@ import { getEventUser } from "@/lib/dbrequests";
 import { auth } from "@clerk/nextjs";
 import Sections from "./sections";
 import Description from "./description";
+import Name from "./title";
 
 export type Event = {
   name: string;
@@ -45,10 +46,10 @@ export default async function Event({
   if (event) {
     return (
       <main className="flex min-h-screen flex-col items-center p-36">
-        <h1 className="text-3xl pb-8">{event.name}</h1>
+        <Name initEvent={event} />
         <div className="w-full flex flex-col space-y-4 px-8">
           <Description initEvent={event} />
-          <Sections initEvent={event}></Sections>
+          <Sections initEvent={event} />
         </div>
       </main>
     );

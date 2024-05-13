@@ -294,3 +294,7 @@ export async function saveSection(data: Event) {
 export async function saveDescription(desc: string, id: number) {
   await db.update(events).set({ description: desc }).where(eq(events.id, id));
 }
+
+export async function saveName(name: string, id: number) {
+  await db.update(events).set({ name: name }).where(eq(events.id, id));
+}
