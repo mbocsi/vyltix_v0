@@ -1,11 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { CgAddR } from "react-icons/cg";
 import { useState } from "react";
 import { saveDescriptionChange } from "./actions";
 import { Event } from "./page";
 import { Textarea } from "@/components/ui/textarea";
+import Edit from "./edit";
 
 export default function Description({ initEvent }: { initEvent: Event }) {
   const [desc, setDesc] = useState(initEvent.description);
@@ -18,39 +17,11 @@ export default function Description({ initEvent }: { initEvent: Event }) {
     >
       <div className="flex flex-row space-x-4 items-center">
         <h1 className="text-2xl">Description</h1>
-        {edit ? (
-          <>
-            <Button
-              className="flex px-4 rounded-lg flex-row items-center gap-2"
-              onClick={() => {
-                desc ? saveDescriptionChange(desc, initEvent.id) : null;
-                setEdit((prev) => !prev);
-              }}
-            >
-              <CgAddR size={25} />
-              <p className="whitespace-nowrap">Save</p>
-            </Button>
-            <Button
-              className="flex px-4 rounded-lg flex-row items-center gap-2"
-              onClick={() => {
-                setEdit((prev) => !prev);
-              }}
-              variant="destructive"
-            >
-              <p className="whitespace-nowrap">Discard Changes</p>
-            </Button>
-          </>
-        ) : (
-          <Button
-            className="flex px-4 rounded-lg flex-row items-center gap-2"
-            onClick={() => {
-              setEdit((prev) => !prev);
-            }}
-          >
-            <CgAddR size={25} />
-            <p className="whitespace-nowrap">Edit</p>
-          </Button>
-        )}
+        <Edit
+          edit={edit}
+          setEdit={setEdit}
+          func={() => (desc ? saveDescriptionChange(desc, initEvent.id) : null)}
+        />
       </div>
       {edit ? (
         <Textarea

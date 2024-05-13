@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,11 +10,11 @@ import {
   TableFooter,
   TableRow,
 } from "@/components/ui/table";
-import { CgAddR } from "react-icons/cg";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { saveSectionChanges } from "./actions";
 import { Event } from "./page";
+import Edit from "./edit";
 
 export default function Sections({ initEvent }: { initEvent: Event }) {
   const [event, setEvent] = useState(initEvent);
@@ -37,39 +36,11 @@ export default function Sections({ initEvent }: { initEvent: Event }) {
     >
       <div className="flex flex-row space-x-4 items-center">
         <h1 className="text-2xl">Sections</h1>
-        {edit ? (
-          <>
-            <Button
-              className="flex px-4 rounded-lg flex-row items-center gap-2"
-              onClick={() => {
-                saveSectionChanges(event);
-                setEdit((prev) => !prev);
-              }}
-            >
-              <CgAddR size={25} />
-              <p className="whitespace-nowrap">Save</p>
-            </Button>
-            <Button
-              className="flex px-4 rounded-lg flex-row items-center gap-2"
-              onClick={() => {
-                setEdit((prev) => !prev);
-              }}
-              variant="destructive"
-            >
-              <p className="whitespace-nowrap">Discard Changes</p>
-            </Button>
-          </>
-        ) : (
-          <Button
-            className="flex px-4 rounded-lg flex-row items-center gap-2"
-            onClick={() => {
-              setEdit((prev) => !prev);
-            }}
-          >
-            <CgAddR size={25} />
-            <p className="whitespace-nowrap">Edit</p>
-          </Button>
-        )}
+        <Edit
+          edit={edit}
+          setEdit={setEdit}
+          func={() => saveSectionChanges(event)}
+        />
       </div>
       {edit ? (
         <Table className="w-full">
