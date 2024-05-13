@@ -253,7 +253,7 @@ export async function getEventInfo(id: number) {
 export async function saveSection(data: Event) {
   await db.transaction(async (tx) => {
     let ticketData: { sectionId: number }[] = [];
-    data.sections.forEach(async (section) => {
+    for (const section of data.sections) {
       const prevSection = await tx.query.sections.findFirst({
         columns: { capacity: true },
         where: eq(sections.id, section.id),
@@ -261,21 +261,23 @@ export async function saveSection(data: Event) {
       if (!prevSection) {
         throw new Error("Section not found in database!");
       }
-      console.log(prevSection.capacity);
+      console.log("previous capacity: ", prevSection.capacity);
       const deficit = section.capacity - prevSection.capacity;
-      console.log(deficit);
+      console.log("deficit: ", deficit);
       if (deficit < 1) {
-        return;
+        continue;
       }
       const data = Array(deficit).fill({
         sectionId: section.id,
       });
       ticketData = ticketData.concat(data);
-    });
+    }
+    console.log("ticket data: ", ticketData);
     if (ticketData.length != 0) {
+      console.log("Inserting tickets!");
       await tx.insert(tickets).values(ticketData);
     }
-    data.sections.forEach(async (section) => {
+    for (const section of data.sections) {
       await tx
         .update(sections)
         .set({
@@ -284,6 +286,6 @@ export async function saveSection(data: Event) {
           price: section.price,
         })
         .where(eq(sections.id, section.id));
-    });
+    }
   });
 }
