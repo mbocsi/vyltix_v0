@@ -3,11 +3,13 @@ import { auth } from "@clerk/nextjs";
 import Sections from "./sections";
 import Description from "./description";
 import Name from "./title";
+import EventTime from "./time";
 
 export type Event = {
   name: string;
   id: number;
   description: string | null;
+  time: Date | null;
   venue: {
     name: string;
   };
@@ -47,6 +49,7 @@ export default async function Event({
     return (
       <main className="flex min-h-screen flex-col items-center p-36">
         <Name initEvent={event} />
+        <EventTime initEvent={event} />
         <div className="w-full flex flex-col space-y-4 px-8">
           <Description initEvent={event} />
           <Sections initEvent={event} />

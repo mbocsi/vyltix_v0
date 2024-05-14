@@ -135,6 +135,7 @@ export async function getEventUser(eventId: number, userId: string) {
       name: true,
       id: true,
       description: true,
+      time: true,
     },
     with: {
       venue: {
@@ -297,4 +298,8 @@ export async function saveDescription(desc: string, id: number) {
 
 export async function saveName(name: string, id: number) {
   await db.update(events).set({ name: name }).where(eq(events.id, id));
+}
+
+export async function saveEventTime(time: Date, id: number) {
+  await db.update(events).set({ time: time }).where(eq(events.id, id));
 }
