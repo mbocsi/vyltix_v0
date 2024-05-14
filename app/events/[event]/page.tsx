@@ -68,8 +68,8 @@ export default async function Event({
         )}
       </div>
 
-      <Link href={`/event/${event}/tickets`} className="w-1/2">
-        <div className="rounded-lg border dark:border-zinc-600 border-zinc-200 p-4 text-center">
+      <Link href={`/events/${event}/tickets`} className="w-1/2">
+        <div className="rounded-lg border dark:border-zinc-600 border-zinc-200 p-4 text-center w-full bg-zinc-500 bg-opacity-0 hover:bg-opacity-10">
           <p className="text-xl">Buy tickets</p>
         </div>
       </Link>

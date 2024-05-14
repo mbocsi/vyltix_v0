@@ -303,3 +303,39 @@ export async function saveName(name: string, id: number) {
 export async function saveEventTime(time: Date, id: number) {
   await db.update(events).set({ time: time }).where(eq(events.id, id));
 }
+
+export async function getEventTicketInfo(id: number) {
+  const results = await db.query.events.findFirst({
+    where: eq(events.id, id),
+    columns: {
+      name: true,
+      description: true,
+      imageURL: true,
+      time: true,
+    },
+    with: {
+      artistsToEvents: {
+        where: eq(artistsToEvents.eventId, id),
+        with: {
+          artist: {
+            columns: {
+              id: true,
+              name: true,
+              imageURL: true,
+            },
+          },
+        },
+      },
+      sections: {
+        columns: {
+          id: true,
+          name: true,
+          capacity: true,
+          admissions: true,
+          price: true,
+        },
+      },
+    },
+  });
+  return results;
+}

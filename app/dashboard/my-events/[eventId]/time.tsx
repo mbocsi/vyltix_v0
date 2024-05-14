@@ -30,9 +30,6 @@ export default function EventTime({ initEvent }: { initEvent: Event }) {
           className="text-2xl"
           type="datetime-local"
           onChange={(e) => {
-            console.log(e.target.value);
-            console.log(Date.parse(e.target.value));
-            console.log(new Date(Date.parse(e.target.value)));
             setEventTime(new Date(e.target.value));
           }}
           defaultValue={eventTime ? eventTime.toString() : ""}

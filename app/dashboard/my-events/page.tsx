@@ -35,9 +35,9 @@ export default async function Page() {
                   key={event.name}
                 >
                   <div className="flex h-16 p-6 rounded-full flex-row justify-between items-center dark:bg-zinc-950 border-zinc-200 dark:border-zinc-900 border">
-                    <p>{event.name}</p>
-                    <p>{event.venue.name}</p>
-                    <p>
+                    <p className="w-1/2">{event.name}</p>
+                    <p className="w-1/4">{event.venue.name}</p>
+                    <p className="w-1/4">
                       {admissions}/{capacity} sold
                     </p>
                   </div>
