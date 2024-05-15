@@ -12,7 +12,9 @@ export default function EventTime({ initEvent }: { initEvent: Event }) {
   return (
     <section
       className={`flex flex-col p-2 space-y-4 rounded-lg ${
-        edit ? "bg-zinc-900 border-2 border-orange-500 border-opacity-50" : ""
+        edit
+          ? "dark:bg-zinc-900 bg-zinc-100 border-2 border-orange-500 border-opacity-50"
+          : ""
       }`}
     >
       <div className="flex flex-row space-x-4 items-center">

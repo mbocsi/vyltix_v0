@@ -20,6 +20,7 @@ export default function Edit({
             func();
             setEdit((prev) => !prev);
           }}
+          variant="default"
         >
           <CgAddR size={16} />
           <p className="whitespace-nowrap text-xs">Save</p>
@@ -42,6 +43,7 @@ export default function Edit({
         onClick={() => {
           setEdit((prev) => !prev);
         }}
+        variant="secondary"
       >
         <CgAddR size={16} />
         <p className="whitespace-nowrap text-xs">Edit</p>
