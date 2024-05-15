@@ -34,8 +34,11 @@ export default async function Tickets({
           })}
         </h1>
       </div>
-      <section id="tickets">
-        <Sections sections={eventInfo.sections}></Sections>
+      <section id="tickets" className="space-y-4">
+        <Sections
+          sections={eventInfo.sections}
+          eventName={eventInfo.name}
+        ></Sections>
       </section>
     </main>
   );

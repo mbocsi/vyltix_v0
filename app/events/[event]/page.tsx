@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getEventInfo } from "@/lib/dbrequests";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function Event({
   params,
@@ -69,9 +70,9 @@ export default async function Event({
       </div>
 
       <Link href={`/events/${event}/tickets`} className="w-1/2">
-        <div className="rounded-lg border dark:border-zinc-600 border-zinc-200 p-4 text-center w-full bg-zinc-500 bg-opacity-0 hover:bg-opacity-10">
+        <Button variant="secondary" className="w-full py-8">
           <p className="text-xl">Buy tickets</p>
-        </div>
+        </Button>
       </Link>
     </main>
   );
