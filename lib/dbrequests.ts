@@ -10,8 +10,10 @@ import {
   tickets,
 } from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
-import { eq, and } from "drizzle-orm";
+import { count, eq, and, sql } from "drizzle-orm";
 import { Event } from "@/app/dashboard/my-events/[eventId]/page";
+import { SectionInfo } from "@/app/events/[event]/tickets/sections";
+import { eventsToArtistsRelations } from "@/db/schema";
 
 export async function addEvent(data: createEventData, userId: string) {
   let eventId;
@@ -339,4 +341,83 @@ export async function getEventTicketInfo(id: number) {
     },
   });
   return results;
+}
+
+class QuantityError extends Error {}
+
+export async function purchaseTickets(sections: SectionInfo[], id: string) {
+  // Check that tickets were actually purchased here
+  await db.transaction(async (tx) => {
+    for (const section of sections) {
+      if (section.quantity == 0) {
+        continue;
+      }
+      const vacant = await tx.query.tickets.findMany({
+        columns: {
+          id: true,
+        },
+        where: and(eq(tickets.sectionId, section.id), eq(tickets.vacant, true)),
+        limit: section.quantity,
+      });
+      console.log(
+        "Found",
+        vacant.length,
+        "vacant tickets for section",
+        section.name,
+      );
+      if (vacant.length != section.quantity) {
+        tx.rollback();
+        return new QuantityError();
+      }
+      for (const sect of vacant) {
+        const updatedTicket = await tx
+          .update(tickets)
+          .set({ vacant: false, ownedBy: id })
+          .where(eq(tickets.id, sect.id))
+          .returning({ id: tickets.id });
+        console.log("Allocated ticket id:", updatedTicket[0].id);
+      }
+    }
+  });
+  return 0;
+}
+
+export async function getUserTickets(id: string) {
+  return await db
+    .select({
+      count: sql<number>`cast(count(${tickets.id}) as int)`,
+      sectionName: sections.name,
+      eventName: events.name,
+      venueName: venues.name,
+      time: events.time,
+    })
+    .from(tickets)
+    .innerJoin(sections, eq(tickets.sectionId, sections.id))
+    .innerJoin(events, eq(sections.eventId, events.id))
+    .innerJoin(venues, eq(events.venueId, venues.id))
+    .where(eq(tickets.ownedBy, id))
+    .groupBy(sections.name, events.name, venues.name, events.time);
+  // return await db.query.tickets.findMany({
+  //   with: {
+  //     section: {
+  //       columns: {
+  //         name: true,
+  //       },
+  //       with: {
+  //         event: {
+  //           columns: {
+  //             name: true,
+  //           },
+  //           with: {
+  //             venue: {
+  //               columns: {
+  //                 name: true,
+  //               },
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
 }

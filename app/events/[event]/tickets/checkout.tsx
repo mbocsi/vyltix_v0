@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { SectionInfo } from "./sections";
+import { buyTickets } from "./actions";
 
 export default function Checkout({
   info,
@@ -51,7 +52,7 @@ export default function Checkout({
             <p className="text-2xl font-thin">${price}</p>
           </div>
           <DrawerFooter>
-            <Button>Purchase</Button>
+            <Button onClick={() => buyTickets(info)}>Purchase</Button>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>

@@ -23,8 +23,6 @@ type Sections = Section[];
 export type SectionInfo = {
   id: number;
   name: string;
-  capacity: number;
-  admissions: number;
   price: string;
   quantity: number;
 };
@@ -38,9 +36,14 @@ export default function Sections({
   sections.sort(
     (sec1, sec2) => parseFloat(sec2.price) - parseFloat(sec1.price),
   );
-  const [sectionsInfo, setSectionsInfo] = useState(
+  const [sectionsPurchaseInfo, setSectionsPurchaseInfo] = useState(
     sections.map((section: Section) => {
-      return { ...section, quantity: 0 };
+      return {
+        id: section.id,
+        name: section.name,
+        price: section.price,
+        quantity: 0,
+      };
     }),
   );
   return (
@@ -55,7 +58,7 @@ export default function Sections({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sectionsInfo.map((section: SectionInfo, index: number) => {
+          {sectionsPurchaseInfo.map((section: SectionInfo, index: number) => {
             return (
               <TableRow key={index}>
                 <TableCell className="font-medium">{section.name}</TableCell>
@@ -64,7 +67,7 @@ export default function Sections({
                   <Button
                     className="rounded-full bg-zinc-500 w-8 h-8 p-0"
                     onClick={() =>
-                      setSectionsInfo((prev) => {
+                      setSectionsPurchaseInfo((prev) => {
                         return prev.map((s) =>
                           section.id == s.id
                             ? { ...s, quantity: Math.max(s.quantity - 1, 0) }
@@ -79,7 +82,7 @@ export default function Sections({
                   <Button
                     className="rounded-full bg-indigo-500 dark:bg-indigo-500 w-8 h-8 p-0"
                     onClick={() =>
-                      setSectionsInfo((prev) => {
+                      setSectionsPurchaseInfo((prev) => {
                         return prev.map((s) =>
                           section.id == s.id
                             ? { ...s, quantity: Math.min(s.quantity + 1, 10) }
@@ -105,7 +108,7 @@ export default function Sections({
             <TableCell></TableCell>
             <TableCell>
               $
-              {sectionsInfo.reduce(
+              {sectionsPurchaseInfo.reduce(
                 (cur, sec) => sec.quantity * parseFloat(sec.price) + cur,
                 0,
               )}
@@ -114,9 +117,9 @@ export default function Sections({
         </TableFooter>
       </Table>
       <Checkout
-        info={sectionsInfo}
+        info={sectionsPurchaseInfo}
         name={eventName}
-        price={sectionsInfo.reduce(
+        price={sectionsPurchaseInfo.reduce(
           (cur, sec) => sec.quantity * parseFloat(sec.price) + cur,
           0,
         )}
