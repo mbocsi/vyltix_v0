@@ -37,8 +37,19 @@ export default async function Page({
         {events.map((rel) => (
           <Link href={`/events/${rel.event.id}`} key={rel.event.id}>
             <div className="flex h-16 p-6 rounded-full flex-row justify-between items-center dark:bg-zinc-950 border-zinc-200 dark:border-zinc-900 border">
-              <p>{rel.event.name}</p>
-              <p>{rel.event.venue.name}</p>
+              <p className="w-1/3">{rel.event.name}</p>
+              <p className="w-1/3">{rel.event.venue.name}</p>
+              <p className="w-1/3 text-right">
+                {rel.event.time
+                  ? rel.event.time.toLocaleString("en-us", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    })
+                  : ""}
+              </p>
             </div>
           </Link>
         ))}

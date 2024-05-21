@@ -36,12 +36,12 @@ export default function Sections({
   eventName: string;
 }) {
   sections.sort(
-    (sec1, sec2) => parseFloat(sec2.price) - parseFloat(sec1.price)
+    (sec1, sec2) => parseFloat(sec2.price) - parseFloat(sec1.price),
   );
   const [sectionsInfo, setSectionsInfo] = useState(
     sections.map((section: Section) => {
       return { ...section, quantity: 0 };
-    })
+    }),
   );
   return (
     <>
@@ -68,7 +68,7 @@ export default function Sections({
                         return prev.map((s) =>
                           section.id == s.id
                             ? { ...s, quantity: Math.max(s.quantity - 1, 0) }
-                            : s
+                            : s,
                         );
                       })
                     }
@@ -83,7 +83,7 @@ export default function Sections({
                         return prev.map((s) =>
                           section.id == s.id
                             ? { ...s, quantity: Math.min(s.quantity + 1, 10) }
-                            : s
+                            : s,
                         );
                       })
                     }
@@ -107,13 +107,20 @@ export default function Sections({
               $
               {sectionsInfo.reduce(
                 (cur, sec) => sec.quantity * parseFloat(sec.price) + cur,
-                0
+                0,
               )}
             </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
-      <Checkout info={sectionsInfo} name={eventName} />
+      <Checkout
+        info={sectionsInfo}
+        name={eventName}
+        price={sectionsInfo.reduce(
+          (cur, sec) => sec.quantity * parseFloat(sec.price) + cur,
+          0,
+        )}
+      />
     </>
   );
 }

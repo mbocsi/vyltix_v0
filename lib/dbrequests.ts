@@ -211,6 +211,7 @@ export async function getArtistEvents(id: number) {
         columns: {
           id: true,
           name: true,
+          time: true,
         },
         with: {
           venue: {

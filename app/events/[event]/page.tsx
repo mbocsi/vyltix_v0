@@ -16,7 +16,7 @@ export default async function Event({
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24 space-y-12">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col items-center gap-4">
         <h1 className="text-3xl">{eventInfo?.name}</h1>
         {eventInfo?.imageURL ? (
           <Image

@@ -16,9 +16,11 @@ import { SectionInfo } from "./sections";
 export default function Checkout({
   info,
   name,
+  price,
 }: {
   info: SectionInfo[];
   name: string;
+  price: number;
 }) {
   return (
     <Drawer>
@@ -29,8 +31,25 @@ export default function Checkout({
         <div className="w-full flex flex-col max-w-sm mx-auto">
           <DrawerHeader>
             <DrawerTitle>Purchasing tickets for {name}</DrawerTitle>
-            <DrawerDescription>Purchase tickets</DrawerDescription>
+            <DrawerDescription>
+              Confirm the following purchase
+            </DrawerDescription>
           </DrawerHeader>
+          <div className="p-4">
+            {info.map((section) => {
+              if (section.quantity > 0) {
+                return (
+                  <p key={section.id} className="font-thin">
+                    {section.quantity}x {section.name}
+                  </p>
+                );
+              }
+            })}
+          </div>
+          <div className="p-4 pb-0">
+            <p className="text-opacity-50">Total:</p>
+            <p className="text-2xl font-thin">${price}</p>
+          </div>
           <DrawerFooter>
             <Button>Purchase</Button>
             <DrawerClose asChild>
