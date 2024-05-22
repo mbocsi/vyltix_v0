@@ -2,20 +2,6 @@ import Link from "next/link";
 import { getUserTickets } from "@/lib/dbrequests";
 import { auth } from "@clerk/nextjs";
 
-const tickets: {
-  event: string;
-  artist: string;
-  venue: string;
-  quantity: number;
-}[] = [
-  {
-    event: "H.E.R. Tour",
-    artist: "IU",
-    venue: "Allstate Arena",
-    quantity: 3,
-  },
-];
-
 export default async function MyTickets() {
   const { userId } = auth();
   const userTickets = userId ? await getUserTickets(userId) : null;

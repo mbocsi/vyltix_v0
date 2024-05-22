@@ -9,6 +9,7 @@ export default async function Page() {
   if (userId) {
     myEvents = await getEvents(userId);
   }
+  console.log(myEvents);
 
   if (myEvents) {
     return (
@@ -21,24 +22,16 @@ export default async function Page() {
             </div>
           ) : (
             myEvents.map((event) => {
-              const admissions = event.sections.reduce(
-                (partialSum, a) => partialSum + a.admissions,
-                0
-              );
-              const capacity = event.sections.reduce(
-                (partialSum, a) => partialSum + a.capacity,
-                0
-              );
               return (
                 <Link
-                  href={`/dashboard/my-events/${event.id}`}
-                  key={event.name}
+                  href={`/dashboard/my-events/${event.eventId}`}
+                  key={event.eventId}
                 >
                   <div className="flex h-16 p-6 rounded-full flex-row justify-between items-center dark:bg-zinc-950 border-zinc-200 dark:border-zinc-900 border">
-                    <p className="w-1/2">{event.name}</p>
-                    <p className="w-1/4">{event.venue.name}</p>
+                    <p className="w-1/2">{event.eventName}</p>
+                    <p className="w-1/4">{event.venueName}</p>
                     <p className="w-1/4">
-                      {admissions}/{capacity} sold
+                      {event.admissionCount}/{event.eventCapacity} sold
                     </p>
                   </div>
                 </Link>

@@ -10,7 +10,7 @@ import {
   tickets,
 } from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
-import { count, eq, and, sql } from "drizzle-orm";
+import { count, eq, and, sql, or } from "drizzle-orm";
 import { Event } from "@/app/dashboard/my-events/[eventId]/page";
 import { SectionInfo } from "@/app/events/[event]/tickets/sections";
 import { eventsToArtistsRelations } from "@/db/schema";
@@ -98,36 +98,66 @@ export async function addEvent(data: createEventData, userId: string) {
 }
 
 export async function getEvents(userId: string) {
-  const results = await db.query.events.findMany({
-    where: eq(events.userId, userId),
-    columns: {
-      id: true,
-      name: true,
-    },
-    with: {
-      venue: {
-        columns: {
-          name: true,
-        },
-      },
-      sections: {
-        columns: {
-          capacity: true,
-          admissions: true,
-        },
-      },
-      artistsToEvents: {
-        with: {
-          artist: {
-            columns: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-  return results;
+  const secs = db
+    .select({
+      admissionCount:
+        sql<number>`cast(count(case ${tickets.vacant} when ${false} then 1 else null end) as int)`.as(
+          "admissionCount",
+        ),
+      eventName: sql<string>`${events.name}`.as("eventName"),
+      eventId: sql<number>`${events.id}`.as("eventId"),
+      venueName: sql<string>`${venues.name}`.as("venueName"),
+      sectionCapacity: sql<number>`${sections.capacity}`.as("sectionCapacity"),
+    })
+    .from(events)
+    .fullJoin(venues, eq(venues.id, events.venueId))
+    .fullJoin(sections, eq(sections.eventId, events.id))
+    .fullJoin(tickets, eq(tickets.sectionId, sections.id))
+    .where(eq(events.userId, userId))
+    .groupBy(events.name, venues.name, sections.capacity, events.id)
+    .as("secs");
+
+  const res = await db
+    .select({
+      admissionCount: sql<number>`cast(sum(${secs.admissionCount}) as int)`,
+      eventName: secs.eventName,
+      eventId: secs.eventId,
+      venueName: secs.venueName,
+      eventCapacity: sql<number>`cast(sum(${secs.sectionCapacity}) as int)`,
+    })
+    .from(secs)
+    .groupBy(secs.eventName, secs.venueName, secs.eventId);
+
+  // const results = await db.query.events.findMany({
+  //   where: eq(events.userId, userId),
+  //   columns: {
+  //     id: true,
+  //     name: true,
+  //   },
+  //   with: {
+  //     venue: {
+  //       columns: {
+  //         name: true,
+  //       },
+  //     },
+  //     sections: {
+  //       columns: {
+  //         capacity: true,
+  //         admissions: true,
+  //       },
+  //     },
+  //     artistsToEvents: {
+  //       with: {
+  //         artist: {
+  //           columns: {
+  //             name: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+  return res;
 }
 
 export async function getEventUser(eventId: number, userId: string) {
@@ -396,7 +426,8 @@ export async function getUserTickets(id: string) {
     .innerJoin(events, eq(sections.eventId, events.id))
     .innerJoin(venues, eq(events.venueId, venues.id))
     .where(eq(tickets.ownedBy, id))
-    .groupBy(sections.name, events.name, venues.name, events.time);
+    .groupBy(sections.name, events.name, venues.name, events.time)
+    .orderBy(events.name);
   // return await db.query.tickets.findMany({
   //   with: {
   //     section: {

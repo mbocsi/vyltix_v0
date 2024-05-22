@@ -52,7 +52,9 @@ export default function Checkout({
             <p className="text-2xl font-thin">${price}</p>
           </div>
           <DrawerFooter>
-            <Button onClick={() => buyTickets(info)}>Purchase</Button>
+            <DrawerClose asChild>
+              <Button onClick={() => buyTickets(info)}>Purchase</Button>
+            </DrawerClose>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>
