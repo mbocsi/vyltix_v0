@@ -1,15 +1,18 @@
 {
   "name": "vyltix",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "drizzle:generate": "drizzle-kit generate:pg",
-    "drizzle:push": "drizzle-kit push:pg",
-    "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts"
+    "devstack": "docker compose -f docker-compose.dev.yaml up",
+    "db": "docker compose -f docker-compose.dev.yaml up db",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:push": "drizzle-kit push",
+    "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts",
+    "drizzle:studio": "drizzle-kit studio --host 127.0.0.1"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.9",
