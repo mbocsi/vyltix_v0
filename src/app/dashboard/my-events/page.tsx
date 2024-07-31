@@ -13,9 +13,8 @@ export default async function Page() {
 
   if (myEvents) {
     return (
-      <main className="min-h-screen flex flex-col items-center p-24 pt-36 gap-12">
-        <h1 className="text-3xl">My Events</h1>
-        <ul className="w-2/3 flex flex-col gap-4">
+      <main className="flex flex-col items-center gap-12">
+        <ul className="w-full flex flex-col gap-4">
           {myEvents.length == 0 ? (
             <div className="w-full flex flex-row justify-center">
               <p className="text-2xl">You have no events!</p>
@@ -27,7 +26,7 @@ export default async function Page() {
                   href={`/dashboard/my-events/${event.eventId}`}
                   key={event.eventId}
                 >
-                  <div className="flex h-16 p-6 rounded-full flex-row justify-between items-center dark:bg-zinc-950 border-zinc-200 dark:border-zinc-900 border">
+                  <div className="flex h-16 p-6 rounded-full flex-row justify-between items-center dark:bg-zinc-950 border-zinc-200 dark:border-zinc-900 border shadow-sm hover:bg-zinc-100">
                     <p className="w-1/2">{event.eventName}</p>
                     <p className="w-1/4">{event.venueName}</p>
                     <p className="w-1/4">

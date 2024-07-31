@@ -8,7 +8,7 @@ export default function Layout({
   return (
     <>
       <DashboardNav />
-      {children}
+      <div className="pl-72 pr-24 pt-36">{children}</div>
     </>
   );
 }
