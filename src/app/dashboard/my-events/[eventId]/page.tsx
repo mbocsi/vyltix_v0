@@ -47,7 +47,7 @@ export default async function Event({
 
   if (event && sections) {
     return (
-      <main className="flex min-h-screen flex-col items-center p-36">
+      <main className="flex flex-col items-center">
         <Name initName={event.name} eventId={event.id} />
         <EventTime initTime={event.time} eventId={event.id} />
         <div className="w-full flex flex-col space-y-4 px-8">

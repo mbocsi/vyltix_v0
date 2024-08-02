@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { CgAddR } from "react-icons/cg";
-import { getUpcomingEvents } from "@/lib/dbrequests";
+import { getPastEvents } from "@/lib/dbrequests";
 import { auth } from "@clerk/nextjs";
-import EventNav from "./event-nav";
+import EventNav from "../event-nav";
 
 export default async function Page() {
   const { userId } = auth();
   let myEvents = null;
   if (userId) {
-    myEvents = await getUpcomingEvents(userId);
+    myEvents = await getPastEvents(userId);
   }
   console.log(myEvents);
 
@@ -40,12 +40,6 @@ export default async function Page() {
                 );
               })
             )}
-            <Link href={`/dashboard/my-events/create-event`} className="w-min">
-              <div className="flex h-12 p-4 rounded-lg flex-row items-center gap-2 bg-zinc-200 dark:bg-zinc-700 border-zinc-200 dark:border-zinc-900 border">
-                <CgAddR size={25} />
-                <p className="whitespace-nowrap">Create Event</p>
-              </div>
-            </Link>
           </ul>
         </main>
       </>

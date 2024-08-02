@@ -23,6 +23,7 @@ export default function Sections({
 }) {
   const [sections, setSections] = useState(initSections);
   const [edit, setEdit] = useState(false);
+  console.log("sections:", sections);
   const admissions = sections.reduce(
     (partialSum: number, a: any) => partialSum + a.admissions,
     0,
@@ -84,7 +85,13 @@ export default function Sections({
                     />
                   </TableCell>
                   <TableCell className="flex flex-row items-center">
-                    $<Input defaultValue={section.price} className="w-1/2" />
+                    $
+                    <Input
+                      defaultValue={section.price}
+                      className="w-1/2"
+                      name="price"
+                      onChange={(e) => handleSectionChange(e, index)}
+                    />
                   </TableCell>
                   <TableCell>${revenue}</TableCell>
                 </TableRow>
@@ -111,6 +118,7 @@ export default function Sections({
     </section>
   );
   function handleSectionChange(e: any, index: number) {
+    console.log("handleSectionChange");
     const {
       name,
       value,
@@ -125,7 +133,7 @@ export default function Sections({
       index == i ? { ...section, [name]: val } : section,
     );
     setSections((prev: any) => {
-      return { ...prev, sections: newSections };
+      return newSections;
     });
   }
 }

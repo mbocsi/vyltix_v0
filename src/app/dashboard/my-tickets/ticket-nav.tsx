@@ -18,12 +18,6 @@ export default function TicketNav() {
       >
         <p className="text-xl">Past events</p>
       </Link>
-      <Link
-        href="/dashboard/my-tickets/listings"
-        className={`hover:bg-zinc-100 inline-flex items-center p-4 ${pathname == "/dashboard/my-tickets/listings" ? "bg-zinc-100" : ""}`}
-      >
-        <p className="text-xl">Listings</p>
-      </Link>
     </nav>
   );
 }

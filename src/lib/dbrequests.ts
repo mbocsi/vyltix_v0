@@ -10,7 +10,7 @@ import {
   tickets,
 } from "@/db";
 import { createEventData } from "@/app/dashboard/my-events/create-event/page";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, gt, lt } from "drizzle-orm";
 import {
   Artist,
   Event,
@@ -134,6 +134,77 @@ export async function getEvents(userId: string) {
   return res;
 }
 
+export async function getPastEvents(userId: string) {
+  const date = new Date();
+  const secs = db
+    .select({
+      admissionCount:
+        sql<number>`cast(count(case ${tickets.vacant} when ${false} then 1 else null end) as int)`.as(
+          "admissionCount",
+        ),
+      eventName: sql<string>`${events.name}`.as("eventName"),
+      eventId: sql<number>`${events.id}`.as("eventId"),
+      venueName: sql<string>`${venues.name}`.as("venueName"),
+      sectionCapacity: sql<number>`${sections.capacity}`.as("sectionCapacity"),
+    })
+    .from(events)
+    .fullJoin(venues, eq(venues.id, events.venueId))
+    .fullJoin(sections, eq(sections.eventId, events.id))
+    .fullJoin(tickets, eq(tickets.sectionId, sections.id))
+    .where(and(eq(events.userId, userId), lt(events.time, date)))
+    .groupBy(events.name, venues.name, sections.capacity, events.id)
+    .as("secs");
+
+  const res = await db
+    .select({
+      admissionCount: sql<number>`cast(sum(${secs.admissionCount}) as int)`,
+      eventName: secs.eventName,
+      eventId: secs.eventId,
+      venueName: secs.venueName,
+      eventCapacity: sql<number>`cast(sum(${secs.sectionCapacity}) as int)`,
+    })
+    .from(secs)
+    .groupBy(secs.eventName, secs.venueName, secs.eventId);
+
+  return res;
+}
+
+export async function getUpcomingEvents(userId: string) {
+  const date = new Date();
+  const secs = db
+    .select({
+      admissionCount:
+        sql<number>`cast(count(case ${tickets.vacant} when ${false} then 1 else null end) as int)`.as(
+          "admissionCount",
+        ),
+      eventName: sql<string>`${events.name}`.as("eventName"),
+      eventId: sql<number>`${events.id}`.as("eventId"),
+      venueName: sql<string>`${venues.name}`.as("venueName"),
+      sectionCapacity: sql<number>`${sections.capacity}`.as("sectionCapacity"),
+    })
+    .from(events)
+    .fullJoin(venues, eq(venues.id, events.venueId))
+    .fullJoin(sections, eq(sections.eventId, events.id))
+    .fullJoin(tickets, eq(tickets.sectionId, sections.id))
+    .where(and(eq(events.userId, userId), gt(events.time, date)))
+    .groupBy(events.name, venues.name, sections.capacity, events.id)
+    .as("secs");
+
+  const res = await db
+    .select({
+      admissionCount: sql<number>`cast(sum(${secs.admissionCount}) as int)`,
+      eventName: secs.eventName,
+      eventId: secs.eventId,
+      venueName: secs.venueName,
+      eventCapacity: sql<number>`cast(sum(${secs.sectionCapacity}) as int)`,
+    })
+    .from(secs)
+    .groupBy(secs.eventName, secs.venueName, secs.eventId);
+
+  return res;
+}
+
+// WARN: Possible security risk (Not checking userId when querying)
 export async function getMyEvent(eventId: number, userId: string) {
   const event: Event[] = await db
     .select({
@@ -295,10 +366,10 @@ export async function getEventInfo(id: number) {
   return results;
 }
 
-export async function saveSection(data: Event) {
+export async function saveSection(secs: Section[]) {
   await db.transaction(async (tx) => {
     let ticketData: { sectionId: number }[] = [];
-    for (const section of data.sections) {
+    for (const section of secs) {
       const prevSection = await tx.query.sections.findFirst({
         columns: { capacity: true },
         where: eq(sections.id, section.id),
@@ -322,7 +393,7 @@ export async function saveSection(data: Event) {
       console.log("Inserting tickets!");
       await tx.insert(tickets).values(ticketData);
     }
-    for (const section of data.sections) {
+    for (const section of secs) {
       await tx
         .update(sections)
         .set({
@@ -436,6 +507,44 @@ export async function getUserTickets(id: string) {
     .innerJoin(events, eq(sections.eventId, events.id))
     .innerJoin(venues, eq(events.venueId, venues.id))
     .where(eq(tickets.ownedBy, id))
+    .groupBy(sections.name, events.name, venues.name, events.time)
+    .orderBy(events.name);
+  return res;
+}
+export async function getUserUpcomingTickets(id: string) {
+  const date = new Date();
+  const res = await db
+    .select({
+      count: sql<number>`cast(count(${tickets.id}) as int)`,
+      sectionName: sections.name,
+      eventName: events.name,
+      venueName: venues.name,
+      time: events.time,
+    })
+    .from(tickets)
+    .innerJoin(sections, eq(tickets.sectionId, sections.id))
+    .innerJoin(events, eq(sections.eventId, events.id))
+    .innerJoin(venues, eq(events.venueId, venues.id))
+    .where(and(eq(tickets.ownedBy, id), gt(events.time, date)))
+    .groupBy(sections.name, events.name, venues.name, events.time)
+    .orderBy(events.name);
+  return res;
+}
+export async function getUserPastTickets(id: string) {
+  const date = new Date();
+  const res = await db
+    .select({
+      count: sql<number>`cast(count(${tickets.id}) as int)`,
+      sectionName: sections.name,
+      eventName: events.name,
+      venueName: venues.name,
+      time: events.time,
+    })
+    .from(tickets)
+    .innerJoin(sections, eq(tickets.sectionId, sections.id))
+    .innerJoin(events, eq(sections.eventId, events.id))
+    .innerJoin(venues, eq(events.venueId, venues.id))
+    .where(and(eq(tickets.ownedBy, id), lt(events.time, date)))
     .groupBy(sections.name, events.name, venues.name, events.time)
     .orderBy(events.name);
   return res;

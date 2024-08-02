@@ -17,6 +17,13 @@ export default function DashboardNav() {
         </Link>
         <Separator />
         <Link
+          href="/dashboard/my-listings"
+          className="text-xl whitespace-nowrap"
+        >
+          My listings
+        </Link>
+        <Separator />
+        <Link
           href="/dashboard/my-profile"
           className="text-xl whitespace-nowrap"
         >

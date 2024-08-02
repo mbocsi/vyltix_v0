@@ -82,7 +82,7 @@ export default function CreateEvent() {
   });
 
   return (
-    <main className="min-h-screen flex flex-col items-center p-24 pt-36 gap-12">
+    <main className="flex flex-col items-center gap-12">
       <h1 className="text-3xl">Create An Event</h1>
       <Form {...form}>
         <form

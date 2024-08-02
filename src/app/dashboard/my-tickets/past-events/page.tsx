@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { getUserUpcomingTickets } from "@/lib/dbrequests";
+import { getUserPastTickets } from "@/lib/dbrequests";
 import { auth } from "@clerk/nextjs";
+import Link from "next/link";
 
-export default async function MyTickets() {
+export default async function PastEvents() {
   const { userId } = auth();
-  const userTickets = userId ? await getUserUpcomingTickets(userId) : null;
+  const userTickets = userId ? await getUserPastTickets(userId) : null;
   console.log(userTickets);
   return (
     <main className="flex flex-col items-center gap-12 w-full">
