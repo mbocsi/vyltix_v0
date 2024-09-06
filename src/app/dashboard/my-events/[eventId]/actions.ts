@@ -7,6 +7,7 @@ import {
   saveName,
   saveEventTime,
   saveEventPublic,
+  deleteEvent,
 } from "@/lib/dbrequests";
 import { Event, Section } from "@/app/dashboard/my-events/[eventId]/page";
 import { redirect } from "next/navigation";
@@ -59,5 +60,15 @@ export async function setEventPublic(pub: boolean, id: number) {
   if (userId) {
     await saveEventPublic(pub, id);
     redirect(`/dashboard/my-events/${id}`);
+  }
+}
+
+export async function delEvent(id: number) {
+  const { userId } = auth();
+  console.log(userId);
+  console.log(id);
+  if (userId) {
+    deleteEvent(id);
+    redirect("/dashboard/my-events");
   }
 }

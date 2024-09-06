@@ -427,6 +427,10 @@ export async function saveEventPublic(pub: boolean, id: number) {
   await db.update(events).set({ public: pub }).where(eq(events.id, id));
 }
 
+export async function deleteEvent(id: number) {
+  await db.delete(events).where(eq(events.id, id));
+}
+
 export async function getEventTicketInfo(id: number) {
   const results = await db.query.events.findFirst({
     where: eq(events.id, id),

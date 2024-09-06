@@ -5,6 +5,7 @@ import Description from "./description";
 import Name from "./title";
 import EventTime from "./time";
 import PublicToggle from "./public";
+import EventDeletion from "./deletion";
 
 export type Section = {
   name: string;
@@ -56,6 +57,7 @@ export default async function Event({
           <Description initDescription={event.description} eventId={event.id} />
           <Sections initSections={sections} />
           <PublicToggle pub={event.public} id={event.id} />
+          <EventDeletion id={event.id} />
         </div>
       </main>
     );

@@ -11,7 +11,7 @@ export default function PublicToggle({
   id: number;
 }) {
   return (
-    <div className="inline-flex items-center justify-between w-1/2 space-x-4">
+    <div className="inline-flex items-center justify-between space-x-4">
       <p className="text-2xl">Change Event Visibility</p>
       {!pub ? (
         <Button variant="destructive" onClick={() => setEventPublic(true, id)}>
