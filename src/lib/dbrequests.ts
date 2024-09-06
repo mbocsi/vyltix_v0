@@ -288,12 +288,16 @@ export async function getMyEvent(eventId: number, userId: string) {
 }
 
 export async function getTopEvents(n: number) {
+  const date = new Date();
   const results = await db.query.events.findMany({
     columns: {
       id: true,
       name: true,
     },
     limit: n,
+    where: (events, { eq, and, gt }) =>
+      and(eq(events.public, true), gt(events.time, date)),
+    orderBy: (events, { asc }) => [asc(events.time)],
   });
   return results;
 }
