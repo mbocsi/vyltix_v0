@@ -4,6 +4,7 @@ import Sections from "./sections";
 import Description from "./description";
 import Name from "./title";
 import EventTime from "./time";
+import PublicToggle from "./public";
 
 export type Section = {
   name: string;
@@ -17,6 +18,7 @@ export type Event = {
   id: number;
   description: string | null;
   time: Date | null;
+  public: boolean;
 };
 
 export type Artist = {
@@ -53,6 +55,7 @@ export default async function Event({
         <div className="w-full flex flex-col space-y-4 px-8">
           <Description initDescription={event.description} eventId={event.id} />
           <Sections initSections={sections} />
+          <PublicToggle pub={event.public} id={event.id} />
         </div>
       </main>
     );

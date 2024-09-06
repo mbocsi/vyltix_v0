@@ -212,6 +212,7 @@ export async function getMyEvent(eventId: number, userId: string) {
       id: events.id,
       description: events.description,
       time: events.time,
+      public: events.public,
     })
     .from(events)
     .where(eq(events.id, eventId));
@@ -416,6 +417,10 @@ export async function saveName(name: string, id: number) {
 
 export async function saveEventTime(time: Date, id: number) {
   await db.update(events).set({ time: time }).where(eq(events.id, id));
+}
+
+export async function saveEventPublic(pub: boolean, id: number) {
+  await db.update(events).set({ public: pub }).where(eq(events.id, id));
 }
 
 export async function getEventTicketInfo(id: number) {

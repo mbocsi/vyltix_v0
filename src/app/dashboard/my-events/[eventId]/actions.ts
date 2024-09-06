@@ -6,9 +6,11 @@ import {
   saveDescription,
   saveName,
   saveEventTime,
+  saveEventPublic,
 } from "@/lib/dbrequests";
 import { Event, Section } from "@/app/dashboard/my-events/[eventId]/page";
 import { redirect } from "next/navigation";
+import Page from "../page";
 
 export async function saveSectionChanges(sections: Section[]) {
   const { userId } = auth();
@@ -47,5 +49,15 @@ export async function saveEventTimeChange(time: Date, id: number) {
   if (userId) {
     await saveEventTime(time, id);
     // redirect(`/dashboard/my-events/${id}`);
+  }
+}
+
+export async function setEventPublic(pub: boolean, id: number) {
+  const { userId } = auth();
+  console.log(userId);
+  console.log(pub);
+  if (userId) {
+    await saveEventPublic(pub, id);
+    redirect(`/dashboard/my-events/${id}`);
   }
 }
