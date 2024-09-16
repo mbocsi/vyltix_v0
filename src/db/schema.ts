@@ -22,7 +22,7 @@ export const events = pgTable(
     time: timestamp("time"),
     public: boolean("public").default(false),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
-  }
+  },
   //   (events) => {
   //     return {
   //       nameIdx: uniqueIndex("name_idx").on(events.name),
@@ -63,7 +63,7 @@ export const sections = pgTable(
     description: text("description"),
     eventId: integer("event_id").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
-  }
+  },
   //   (sections) => {
   //     return {
   //       nameIdx: index("name_idx").on(sections.name),
@@ -101,7 +101,7 @@ export const artists = pgTable(
     imageURL: text("image"),
     description: text("description"),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
-  }
+  },
   //   (artists) => {
   //     return {
   //       nameIdx: index("name_idx").on(artists.name),
@@ -130,5 +130,5 @@ export const eventsToArtistsRelations = relations(
       fields: [artistsToEvents.artistId],
       references: [artists.id],
     }),
-  })
+  }),
 );
