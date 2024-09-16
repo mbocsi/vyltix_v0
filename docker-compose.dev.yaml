@@ -1,0 +1,29 @@
+version: "3"
+services:
+  db:
+    image: postgres:16.0
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=development
+
+  next-app:
+    build:
+      dockerfile: dev.dockerfile
+
+    env_file:
+      - .env.dev.local
+
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+
+    restart: always
+    ports:
+      - 3000:3000
